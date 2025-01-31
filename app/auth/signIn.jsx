@@ -19,7 +19,7 @@ export default function SignIn() {
       style={{
         display: 'flex',
         alignItems: 'center',
-        paddingTop: 100,
+        paddingTop: 20,
         padding: 25,
         flex: 1,
         backgroundColor: Colors.WHITE,
