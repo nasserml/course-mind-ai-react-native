@@ -8,23 +8,25 @@ import {
   Pressable,
   ScrollView,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Colors from '../../constant/Colors';
 import { useRouter } from 'expo-router';
 import { auth, db } from '../../config/firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
+import { UserDetailContext } from '../../context/UserDetailContext';
 
 export default function SignUp() {
   const [fullName, setFullName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [loading, setLoading] = useState(false);
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const router = useRouter();
   const CreateAccount = () => {
     setLoading(true);
-    console.log({email});
-    console.log({password});
+    console.log({ email });
+    console.log({ password });
     // return;
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (resp) => {
@@ -36,21 +38,24 @@ export default function SignUp() {
         setLoading(false);
       })
       .catch((e) => {
-        console.log(e);
         console.log(e.message);
         setLoading(false);
       });
   };
 
   const SaveUser = async (user) => {
-    await setDoc(doc(db, 'users', email), {
+    const data = {
       name: fullName,
       email: email,
       member: false,
       uid: user?.uid,
-    });
+    };
+    await setDoc(doc(db, 'users', email), data);
+
+    setUserDetail(data);
 
     // Navigate to New Screen
+    router.replace('/auth/signIn');
   };
   return (
     <View

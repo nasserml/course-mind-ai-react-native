@@ -6,14 +6,47 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
+  ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import Colors from '../../constant/Colors';
 import { useRouter } from 'expo-router';
-
+import { auth, db } from './../../config/firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import {UserDetailContext} from '../../context/UserDetailContext';
 
 export default function SignIn() {
-    const router = useRouter();
+  const router = useRouter();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
+  const [loading, setLoading] = useState(false);
+
+  const onSignInClick = () => {
+    setLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (resp) => {
+        const user = resp.user;
+        console.log(user);
+        await getUserDetail();
+        setLoading(false);
+        router.replace('/(tabs)/home');
+      })
+      .catch((e) => {
+        console.log(e);
+        ToastAndroid.show('Incorrect email or password', ToastAndroid.BOTTOM);
+        setLoading(false);
+      });
+  };
+
+  const getUserDetail = async () => {
+    const user = await getDoc(doc(db, 'users', email));
+    console.log(user.data());
+    setUserDetail(user.data());
+  };
+
   return (
     <View
       style={{
@@ -42,13 +75,21 @@ export default function SignIn() {
       >
         Welcome Back
       </Text>
-      <TextInput placeholder="Email" style={styles.textInput} />
       <TextInput
+        onChangeText={(value) => setEmail(value)}
+        placeholder="Email"
+        style={styles.textInput}
+      />
+      <TextInput
+        onChangeText={(value) => setPassword(value)}
         placeholder="Password"
         secureTextEntry={true}
         style={styles.textInput}
       />
       <TouchableOpacity
+        onPress={onSignInClick}
+        disabled={loading}
+
         style={{
           backgroundColor: Colors.PRIMARY,
           padding: 15,
@@ -57,7 +98,7 @@ export default function SignIn() {
           borderRadius: 10,
         }}
       >
-        <Text
+        {!loading? <Text
           style={{
             fontFamily: 'outfit',
             fontSize: 20,
@@ -65,8 +106,8 @@ export default function SignIn() {
             textAlign: 'center',
           }}
         >
-          Sign In 
-        </Text>
+          Sign In
+        </Text> : <ActivityIndicator size={'small'} color={Colors.WHITE} />}
       </TouchableOpacity>
       <View
         style={{ display: 'flex', flexDirection: 'row', gap: 5, marginTop: 20 }}
