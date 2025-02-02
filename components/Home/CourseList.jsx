@@ -1,10 +1,19 @@
-import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 import { imageAssets } from '../../constant/Option';
 import Colors from '../../constant/Colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
 
 export default function CourseList({ courseList }) {
+  const router = useRouter();
   return (
     <View
       style={{
@@ -17,7 +26,18 @@ export default function CourseList({ courseList }) {
         data={courseList}
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
-          <View key={index} style={styles.courseContainer}>
+          <TouchableOpacity
+            key={index}
+            style={styles.courseContainer}
+            onPress={() =>
+              router.push({
+                pathname: '/courseView',
+                params: {
+                  courseParams: JSON.stringify(item),
+                },
+              })
+            }
+          >
             <Image
               source={imageAssets[item.banner_image]}
               style={{
@@ -38,14 +58,14 @@ export default function CourseList({ courseList }) {
                 alignItems: 'center',
                 gap: 5,
                 marginTop: 5,
-              }} 
+              }}
             >
               <Ionicons name="book-outline" size={20} color="black" />
               <Text style={{ fontFamily: 'outfit' }}>
                 {item?.chapters?.length} Chapters
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>
