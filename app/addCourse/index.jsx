@@ -60,10 +60,12 @@ export default function AddCourse() {
       console.log(courses);
       // Save Course Info to database
       for (const course of courses) {
-        await setDoc(doc(db, 'Courses', Date.now().toString()), {
+        const docId = Date.now().toString();
+        await setDoc(doc(db, 'Courses', docId), {
           ...course,
           createdOn: new Date(),
-          createdBy: userDetail?.email,
+          createdBy: userDetail?.email ?? '',
+          docId: docId,
         });
       }
       //   courses?.forEach(async (course) => {});
