@@ -27,7 +27,7 @@ export default function ChapterView() {
     setLoader(false);
 
     // Go Back
-    router.back();
+    router.replace('/courseView/' + docId);
   };
 
   return (
