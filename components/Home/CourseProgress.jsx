@@ -7,7 +7,7 @@ import * as Progress from 'react-native-progress';
 export default function CourseProgress({ courseList }) {
   const GetCompletedChapters = (course) => {
     const completedChapter = course?.completedChapter?.length;
-    const perc = (completedChapter / course?.chapters?.length) ;
+    const perc = completedChapter / course?.chapters?.length;
     return perc;
   };
   return (
@@ -16,7 +16,11 @@ export default function CourseProgress({ courseList }) {
         marginTop: 10,
       }}
     >
-      <Text style={{ fontSize: 25, fontFamily: 'outfit-bold' }}>Progress</Text>
+      <Text
+        style={{ fontSize: 25, fontFamily: 'outfit-bold', color: Colors.WHITE }}
+      >
+        Progress
+      </Text>
       <FlatList
         data={courseList}
         horizontal={true}
@@ -27,7 +31,7 @@ export default function CourseProgress({ courseList }) {
             style={{
               margin: 7,
               padding: 15,
-              backgroundColor: Colors.BG_GRAY,
+              backgroundColor: Colors.WHITE,
               borderRadius: 15,
               width: 280,
             }}

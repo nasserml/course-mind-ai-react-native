@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import React, { useContext } from 'react';
 import { UserDetailContext } from '../../context/UserDetailContext';
 import  Ionicons  from '@expo/vector-icons/Ionicons';
+import Colors from '../../constant/Colors';
 
 export default function Header() {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
@@ -18,6 +19,7 @@ export default function Header() {
           style={{
             fontSize: 25,
             fontFamily: 'outfit-bold',
+            color: Colors.WHITE
           }}
         >
           Hello, {userDetail?.name}
@@ -26,6 +28,7 @@ export default function Header() {
           style={{
             fontSize: 17,
             fontFamily: 'outfit',
+            color: Colors.WHITE
           }}
         >
           Let's Get Started!
