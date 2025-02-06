@@ -51,13 +51,20 @@ export default function Quiz() {
       await updateDoc(doc(db, 'Courses', course?.docId), {
         quizResult: result,
       });
+      
+      // Redirect user To Quiz summery
+      router.replace({
+        pathname:'/quiz/summary',
+        params: {
+            quizResultParams: JSON.stringify(result),
+        }
+      })
       setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
 
-    // Redirect user To Quiz summery
   };
 
   return (
@@ -76,7 +83,7 @@ export default function Quiz() {
             gap: 10,
           }}
         >
-          <Pressable>
+          <Pressable disabled={currentPage == 0} onPress={() => setCurrentPage(currentPage - 1) }>
             <Ionicons name="arrow-back" size={30} color={Colors.WHITE} />
           </Pressable>
           <Text
