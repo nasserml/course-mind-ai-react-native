@@ -21,6 +21,10 @@ export default function AddCourse() {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const router = useRouter();
   const onGenerateTopic = async () => {
+    if (userDetail?.member == false) {
+      router.push('/subscriptionWall');
+      return;
+    }
     setLoading(true);
     console.log(userInput);
     // Get Topic Ideas from AI Model
