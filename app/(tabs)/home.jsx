@@ -4,7 +4,7 @@ import Header from '../../components/Home/Header';
 import Colors from '../../constant/Colors';
 import NoCourse from '../../components/Home/NoCourse';
 import { db } from '../../config/firebaseConfig';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { UserDetailContext } from '../../context/UserDetailContext';
 import CourseList from '../../components/Home/CourseList';
 
@@ -26,7 +26,8 @@ export default function Home() {
     console.log(userDetail?.email);
     const q = query(
       collection(db, 'Courses'),
-      where('createdBy', '==', userDetail?.email)
+      where('createdBy', '==', userDetail?.email),
+      orderBy('createdOn', 'desc')
     );
 
     const querySnapShot = await getDocs(q);
@@ -49,11 +50,14 @@ export default function Home() {
             backgroundColor: Colors.WHITE,
           }}
         >
-          <Image source={require('./../../assets/images/wave.png')} style={{
-            position: 'absolute',
-            width: '100%',
-            height: 500
-          }} />
+          <Image
+            source={require('./../../assets/images/wave.png')}
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: 500,
+            }}
+          />
           <View
             style={{
               padding: 25,
