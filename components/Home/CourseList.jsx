@@ -12,7 +12,11 @@ import Colors from '../../constant/Colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 
-export default function CourseList({ courseList }) {
+export default function CourseList({
+  courseList,
+  heading = 'Courses',
+  enroll = false,
+}) {
   const router = useRouter();
   return (
     <View
@@ -20,7 +24,7 @@ export default function CourseList({ courseList }) {
         marginTop: 15,
       }}
     >
-      <Text style={{ fontSize: 25, fontFamily: 'outfit-bold' }}>Courses</Text>
+      <Text style={{ fontSize: 25, fontFamily: 'outfit-bold' }}>{heading}</Text>
       <FlatList
         horizontal={true}
         data={courseList}
@@ -31,9 +35,10 @@ export default function CourseList({ courseList }) {
             style={styles.courseContainer}
             onPress={() =>
               router.push({
-                pathname: '/courseView/'+ item?.docId,
+                pathname: '/courseView/' + item?.docId,
                 params: {
                   courseParams: JSON.stringify(item),
+                  enroll: enroll,
                 },
               })
             }
